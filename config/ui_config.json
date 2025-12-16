@@ -1,0 +1,926 @@
+{
+  "sections": [
+    {
+      "id": "deep_cleaning",
+      "name": "التنظيف العميق",
+      "color": "#4CAF50",
+      "scripts": [
+        {
+          "name": "تنظيف الملفات المؤقتة",
+          "script": "scripts/deep_cleaning/clean_temp.ps1",
+          "icon": "clean",
+          "description": "حذف الملفات المؤقتة من النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تنظيف ذاكرة التخزين المؤقت لتحديث ويندوز",
+          "script": "scripts/deep_cleaning/clear_win_update_cache.ps1",
+          "icon": "windows",
+          "description": "إزالة ملفات التحديث القديمة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "حذف ملفات Prefetch",
+          "script": "scripts/deep_cleaning/delete_prefetch_files.ps1",
+          "icon": "prefetch",
+          "description": "تنظيف ملفات التشغيل المسبق",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إزالة تقارير الأعطال",
+          "script": "scripts/deep_cleaning/delete_crash_dumps.ps1",
+          "icon": "crash",
+          "description": "حذف ملفات التقارير المجمدة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "حذف السجلات القديمة",
+          "script": "scripts/deep_cleaning/delete_old_logs.ps1",
+          "icon": "log",
+          "description": "تنظيف السجلات النظامية القديمة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف ذاكرة التخزين المؤقتة للصور المصغرة",
+          "script": "scripts/deep_cleaning/clear_thumbnail_cache.ps1",
+          "icon": "image",
+          "description": "إزالة الصور المصغرة المؤقتة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تفريغ ذاكرة التخزين المؤقتة لـ DNS",
+          "script": "scripts/deep_cleaning/flush_dns_cache.ps1",
+          "icon": "network",
+          "description": "تفريغ الـ DNS Cache",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تفريغ ذاكرة التخزين المؤقتة لـ ARP",
+          "script": "scripts/deep_cleaning/clear_arp_cache.ps1",
+          "icon": "network",
+          "description": "تفريغ الـ ARP Cache",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إفراغ سلة المهملات",
+          "script": "scripts/deep_cleaning/empty_recycle_bin.ps1",
+          "icon": "trash",
+          "description": "حذف جميع الملفات من سلة المهملات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "حذف مثبتات البرامج القديمة",
+          "script": "scripts/deep_cleaning/remove_old_installers.ps1",
+          "icon": "installer",
+          "description": "إزالة ملفات التثبيت المؤقتة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف مجلد WinSxS (الوضع الآمن)",
+          "script": "scripts/deep_cleaning/clean_winsxs_safe.ps1",
+          "icon": "folder",
+          "description": "تنظيف مجلد مكونات ويندوز",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تنظيف سجلات الأحداث",
+          "script": "scripts/deep_cleaning/purge_event_logs.ps1",
+          "icon": "log",
+          "description": "حذف سجلات النظام القديمة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تنظيف ذاكرة التخزين المؤقتة للمتصفحات",
+          "script": "scripts/deep_cleaning/browser_cache_clean.ps1",
+          "icon": "browser",
+          "description": "إزالة الكاش من المتصفحات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف ملفات Cortana",
+          "script": "scripts/deep_cleaning/clear_cortana_files.ps1",
+          "icon": "search",
+          "description": "إزالة بيانات البحث من Cortana",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف تقارير الأخطاء",
+          "script": "scripts/deep_cleaning/error_reporting_cleanup.ps1",
+          "icon": "error",
+          "description": "إزالة تقارير الأخطاء القديمة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف ذاكرة التخزين المؤقتة لـ OneDrive",
+          "script": "scripts/deep_cleaning/onedrive_cache_clear.ps1",
+          "icon": "cloud",
+          "description": "تنظيف الكاش المؤقت لـ OneDrive",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف سجلات Windows Defender",
+          "script": "scripts/deep_cleaning/defender_log_clean.ps1",
+          "icon": "shield",
+          "description": "إزالة سجلات مكافح الفيروسات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف ذاكرة التخزين المؤقتة لـ Delivery Optimization",
+          "script": "scripts/deep_cleaning/delivery_optimization_clear.ps1",
+          "icon": "download",
+          "description": "تنظيف ملفات التحديث المشتركة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "حذف ملفات النظام غير المستخدمة",
+          "script": "scripts/deep_cleaning/unused_system_files_delete.ps1",
+          "icon": "system",
+          "description": "إزالة الملفات القديمة من النظام",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تنظيف شامل آمن",
+          "script": "scripts/deep_cleaning/auto_deep_clean_all_safe.ps1",
+          "icon": "auto-clean",
+          "description": "تنفيذ جميع عمليات التنظيف الآمنة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": true
+        }
+      ]
+    },
+    {
+      "id": "repair_restore",
+      "name": "الإصلاح والاستعادة",
+      "color": "#2196F3",
+      "scripts": [
+        {
+          "name": "فحص ملفات النظام (SFC)",
+          "script": "scripts/repair_restore/run_sfc_scannow.ps1",
+          "icon": "shield",
+          "description": "فحص وإصلاح ملفات النظام التالفة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح صورة النظام (DISM)",
+          "script": "scripts/repair_restore/dism_restorehealth.ps1",
+          "icon": "heal",
+          "description": "إصلاح صورة النظام باستخدام DISM",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إعادة تثبيت مكونات Windows Update",
+          "script": "scripts/repair_restore/reinstall_windows_update_components.ps1",
+          "icon": "windows-update",
+          "description": "إعادة تثبيت خدمات التحديث",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح خدمة Windows Installer",
+          "script": "scripts/repair_restore/repair_windows_installer_service.ps1",
+          "icon": "installer",
+          "description": "إصلاح خدمة تثبيت البرامج",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح محولات الشبكة",
+          "script": "scripts/repair_restore/network_adapter_fix.ps1",
+          "icon": "network",
+          "description": "إصلاح مشاكل محولات الشبكة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إعادة تعيين مكدس TCP/IP",
+          "script": "scripts/repair_restore/reset_tcpip_stack.ps1",
+          "icon": "tcpip",
+          "description": "إعادة تعيين إعدادات الشبكة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إعادة تعيين Winsock",
+          "script": "scripts/repair_restore/winsock_reset.ps1",
+          "icon": "network",
+          "description": "إصلاح مشاكل اتصال الشبكة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "استعادة متجر Microsoft",
+          "script": "scripts/repair_restore/store_restore.ps1",
+          "icon": "store",
+          "description": "إصلاح متجر التطبيقات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إعادة تسجيل ملفات DLL الأساسية",
+          "script": "scripts/repair_restore/register_core_dlls.ps1",
+          "icon": "dll",
+          "description": "إعادة تسجيل مكتبات النظام",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح أذونات النظام",
+          "script": "scripts/repair_restore/permission_fix.ps1",
+          "icon": "permission",
+          "description": "إصلاح صلاحيات الملفات والمجلدات",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح إعدادات الإقلاع",
+          "script": "scripts/repair_restore/boot_repair.ps1",
+          "icon": "boot",
+          "description": "إصلاح مشاكل إقلاع النظام",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح أساسي للسجل",
+          "script": "scripts/repair_restore/basic_registry_fix.ps1",
+          "icon": "registry",
+          "description": "إصلاح مشاكل السجل الأساسية",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إعادة تشغيل الخدمات الحرجة",
+          "script": "scripts/repair_restore/restart_critical_services.ps1",
+          "icon": "service",
+          "description": "إعادة تشغيل الخدمات المهمة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إعادة تعيين خطط الطاقة",
+          "script": "scripts/repair_restore/power_plan_reset.ps1",
+          "icon": "power",
+          "description": "استعادة إعدادات الطاقة الافتراضية",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل مصحح مشاكل الصوت",
+          "script": "scripts/repair_restore/sound_troubleshoot.ps1",
+          "icon": "sound",
+          "description": "حل مشاكل الصوت تلقائياً",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إعادة تعيين منافذ USB",
+          "script": "scripts/repair_restore/usb_reset.ps1",
+          "icon": "usb",
+          "description": "إصلاح مشاكل منافذ USB",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح اتصال البلوتوث",
+          "script": "scripts/repair_restore/bluetooth_fix.ps1",
+          "icon": "bluetooth",
+          "description": "إصلاح مشاكل اتصال البلوتوث",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إعادة تشغيل خدمة الطباعة",
+          "script": "scripts/repair_restore/print_service_restart.ps1",
+          "icon": "print",
+          "description": "إصلاح مشاكل الطابعات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إنشاء نقطة استعادة",
+          "script": "scripts/repair_restore/create_restore_point.ps1",
+          "icon": "restore",
+          "description": "إنشاء نقطة استعادة للنظام",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "استعادة النظام إلى آخر نقطة",
+          "script": "scripts/repair_restore/full_restore_last_point.ps1",
+          "icon": "restore-full",
+          "description": "استعادة النظام إلى نقطة سابقة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        }
+      ]
+    },
+    {
+      "id": "system_check",
+      "name": "الفحص والتحليل",
+      "color": "#00BCD4",
+      "scripts": [
+        {
+          "name": "تقرير شامل عن حالة النظام",
+          "script": "scripts/system_check/general_system_health_report.ps1",
+          "icon": "health",
+          "description": "تقرير كامل عن حالة النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "فحص الذاكرة العشوائية",
+          "script": "scripts/system_check/ram_memory_integrity_check.ps1",
+          "icon": "memory",
+          "description": "فحص سلامة ذاكرة الوصول العشوائي",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "فحص المعالج",
+          "script": "scripts/system_check/cpu_test.ps1",
+          "icon": "cpu",
+          "description": "تحليل أداء المعالج",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحليل القرص (CHKDSK)",
+          "script": "scripts/system_check/chkdsk_analysis.ps1",
+          "icon": "disk",
+          "description": "فحص سلامة القرص الصلب",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "فحص القطاعات التالفة",
+          "script": "scripts/system_check/bad_sector_check.ps1",
+          "icon": "sector",
+          "description": "البحث عن القطاعات التالفة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "مراقبة درجة حرارة الجهاز",
+          "script": "scripts/system_check/hardware_temp.ps1",
+          "icon": "temperature",
+          "description": "مراقبة درجة حرارة المكونات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحليل عناصر بدء التشغيل",
+          "script": "scripts/system_check/startup_items.ps1",
+          "icon": "startup",
+          "description": "عرض البرامج التي تبدأ مع النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "البحث عن الخدمات غير الضرورية",
+          "script": "scripts/system_check/unnecessary_services.ps1",
+          "icon": "service",
+          "description": "تحديد الخدمات التي يمكن تعطيلها",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحليل المهام المجدولة",
+          "script": "scripts/system_check/scheduled_tasks.ps1",
+          "icon": "task",
+          "description": "مراجعة المهام المجدولة للنظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "التحقق من تعريفات الأجهزة",
+          "script": "scripts/system_check/drivers_verify.ps1",
+          "icon": "driver",
+          "description": "التأكد من تعريفات الأجهزة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "التحقق من سلامة نظام التشغيل",
+          "script": "scripts/system_check/os_integrity.ps1",
+          "icon": "integrity",
+          "description": "فحص سلامة ملفات النظام",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تشخيص الشبكة",
+          "script": "scripts/system_check/network_diag.ps1",
+          "icon": "network",
+          "description": "تحليل حالة الشبكة والاتصال",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "فحص المنافذ المفتوحة",
+          "script": "scripts/system_check/open_ports_scan.ps1",
+          "icon": "port",
+          "description": "كشف المنافذ المفتوحة على النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "فحص أذونات الملفات",
+          "script": "scripts/system_check/file_permissions_check.ps1",
+          "icon": "permission",
+          "description": "التحقق من صلاحيات الملفات المهمة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "فحص الملفات المشبوهة",
+          "script": "scripts/system_check/suspicious_file_scanner.ps1",
+          "icon": "malware",
+          "description": "البحث عن ملفات مشبوهة في النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "كشف مشاكل استهلاك الطاقة",
+          "script": "scripts/system_check/power_issue_detect.ps1",
+          "icon": "power",
+          "description": "تحليل استهلاك الطاقة ومشاكله",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "التحقيق في أسباب التجمد",
+          "script": "scripts/system_check/freeze_cause_investigation.ps1",
+          "icon": "freeze",
+          "description": "تحديد أسباب تجمد النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحديد أعناق الأداء",
+          "script": "scripts/system_check/performance_bottleneck.ps1",
+          "icon": "performance",
+          "description": "البحث عن عوائق الأداء في النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحليل استخدام الذاكرة",
+          "script": "scripts/system_check/ram_profiling.ps1",
+          "icon": "ram",
+          "description": "مراقبة استخدام الذاكرة العشوائية",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تصدير تقرير النظام",
+          "script": "scripts/system_check/export_report.ps1",
+          "icon": "report",
+          "description": "إنشاء تقرير شامل عن النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        }
+      ]
+    },
+    {
+      "id": "optimization",
+      "name": "التحسين والأداء",
+      "color": "#FFEB3B",
+      "scripts": [
+        {
+          "name": "ترتيب عناصر بدء التشغيل",
+          "script": "scripts/optimization/manage_startup_items.ps1",
+          "icon": "startup",
+          "description": "إدارة البرامج التي تبدأ مع النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تعطيل الخدمات غير الضرورية",
+          "script": "scripts/optimization/disable_nonessential_services.ps1",
+          "icon": "service",
+          "description": "تعطيل الخدمات التي تؤثر على الأداء",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تحسين وقت الإقلاع",
+          "script": "scripts/optimization/boot_time_optimize.ps1",
+          "icon": "boot",
+          "description": "تسريع وقت بدء تشغيل النظام",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تفعيل وضع الأداء العالي",
+          "script": "scripts/optimization/enhance_performance_mode.ps1",
+          "icon": "performance",
+          "description": "ضبط النظام لوضع الأداء العالي",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحسين استخدام الذاكرة",
+          "script": "scripts/optimization/optimize_ram_usage.ps1",
+          "icon": "memory",
+          "description": "تحسين إدارة الذاكرة العشوائية",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحسين أداء القرص",
+          "script": "scripts/optimization/improve_disk_access.ps1",
+          "icon": "disk",
+          "description": "تحسين إعدادات الوصول للقرص",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تجزئة القرص الصلب",
+          "script": "scripts/optimization/hdd_smart_defrag.ps1",
+          "icon": "defrag",
+          "description": "تحسين تنظيم الملفات على القرص",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تنفيذ TRIM للقرص SSD",
+          "script": "scripts/optimization/ssd_trim.ps1",
+          "icon": "ssd",
+          "description": "تحسين أداء القرص الصلب الصلب",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تنظيم مجلدات المستخدم",
+          "script": "scripts/optimization/organize_user_dirs.ps1",
+          "icon": "folder",
+          "description": "ترتيب المجلدات الشخصية للمستخدم",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تصنيف مجلد التنزيلات",
+          "script": "scripts/optimization/sort_downloads_folder.ps1",
+          "icon": "download",
+          "description": "تنظيم ملفات مجلد التنزيلات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف سطح المكتب",
+          "script": "scripts/optimization/desktop_tidy_up.ps1",
+          "icon": "desktop",
+          "description": "تنظيم ملفات سطح المكتب",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تنظيف آمن للسجل",
+          "script": "scripts/optimization/safe_registry_cleanup.ps1",
+          "icon": "registry",
+          "description": "إزالة المدخلات غير الضرورية من السجل",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تعطيل تتبع Microsoft",
+          "script": "scripts/optimization/disable_telemetry.ps1",
+          "icon": "telemetry",
+          "description": "إيقاف جمع البيانات التلقائي",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تعطيل خدمات التتبع",
+          "script": "scripts/optimization/disable_tracking.ps1",
+          "icon": "tracking",
+          "description": "إيقاف خدمات التتبع المختلفة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تحسين سرعة الشبكة",
+          "script": "scripts/optimization/network_speed_boost.ps1",
+          "icon": "network",
+          "description": "تحسين إعدادات الشبكة للسرعة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إعداد أسرع خوادم DNS",
+          "script": "scripts/optimization/fastest_dns_setup.ps1",
+          "icon": "dns",
+          "description": "تغيير خوادم DNS لأسرع منها",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تفعيل أولوية الألعاب",
+          "script": "scripts/optimization/gaming_priority_enable.ps1",
+          "icon": "game",
+          "description": "ضبط النظام لألعاب أفضل أداء",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحسين استهلاك الطاقة للكمبيوتر المحمول",
+          "script": "scripts/optimization/laptop_power_save.ps1",
+          "icon": "laptop",
+          "description": "تحسين عمر البطارية للكمبيوتر المحمول",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تقييد التطبيقات الخلفية",
+          "script": "scripts/optimization/restrict_bg_apps.ps1",
+          "icon": "app",
+          "description": "منع التطبيقات من العمل في الخلفية",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تحسين شامل للنظام",
+          "script": "scripts/optimization/comprehensive_optimization.ps1",
+          "icon": "optimize",
+          "description": "تنفيذ جميع عمليات التحسين الآمنة",
+          "requiresAdmin": false,
+          "confirmBeforeRun": true
+        }
+      ]
+    },
+    {
+      "id": "advanced_control",
+      "name": "التحكم المتقدم",
+      "color": "#9C27B0",
+      "scripts": [
+        {
+          "name": "إيقاف حماية ويندوز مؤقتاً",
+          "script": "scripts/advanced_control/temporary_disable_windows_defender.ps1",
+          "icon": "defender",
+          "description": "تعطيل مكافح الفيروسات مؤقتاً",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إعادة تفعيل حماية ويندوز",
+          "script": "scripts/advanced_control/reactivate_defender_protection.ps1",
+          "icon": "shield",
+          "description": "تفعيل مكافح الفيروسات مرة أخرى",
+          "requiresAdmin": true,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "عرض الخدمات الحرجة",
+          "script": "scripts/advanced_control/list_critical_running_services.ps1",
+          "icon": "service",
+          "description": "عرض جميع الخدمات المهمة للنظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إنهاء العمليات المجمدة",
+          "script": "scripts/advanced_control/kill_frozen_processes.ps1",
+          "icon": "process",
+          "description": "إيقاف العمليات التي لا تستجيب",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إعادة تشغيل Windows Explorer",
+          "script": "scripts/advanced_control/restart_windows_explorer_shell.ps1",
+          "icon": "explorer",
+          "description": "إعادة تشغيل واجهة سطح المكتب",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تفريغ جميع الذاكرة المؤقتة",
+          "script": "scripts/advanced_control/flush_all_system_caches.ps1",
+          "icon": "cache",
+          "description": "تنظيف جميع الذاكرة المؤقتة في النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تبديل المظهر (داكن/فاتح)",
+          "script": "scripts/advanced_control/switch_theme_light_dark.ps1",
+          "icon": "theme",
+          "description": "تغيير مظهر واجهة ويندوز",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تبديل تحديثات Windows",
+          "script": "scripts/advanced_control/toggle_updates_enabled.ps1",
+          "icon": "update",
+          "description": "تفعيل أو تعطيل التحديثات التلقائية",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "قفل تحديثات Windows مؤقتاً",
+          "script": "scripts/advanced_control/lock_windows_updates_until_next_reboot.ps1",
+          "icon": "lock",
+          "description": "منع تحديثات النظام حتى إعادة التشغيل",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تفعيل وضع الإله (God Mode)",
+          "script": "scripts/advanced_control/godmode_activation.ps1",
+          "icon": "godmode",
+          "description": "إنشاء مجلد يحتوي على جميع إعدادات النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إظهار الملفات المخفية",
+          "script": "scripts/advanced_control/reveal_hidden_system_files.ps1",
+          "icon": "hidden",
+          "description": "جعل الملفات المخفية مرئية",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "فتح أدوات الإدارة",
+          "script": "scripts/advanced_control/show_advanced_admin_tools.ps1",
+          "icon": "admin",
+          "description": "عرض جميع أدوات إدارة النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "إعادة تعيين سياسات المجموعة",
+          "script": "scripts/advanced_control/reset_group_policy_settings.ps1",
+          "icon": "policy",
+          "description": "استعادة إعدادات السياسات الافتراضية",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "نسخ احتياطي للسجل",
+          "script": "scripts/advanced_control/backup_registry_to_file.ps1",
+          "icon": "backup",
+          "description": "إنشاء نسخة احتياطية من السجل",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "استعادة السجل من نسخة احتياطية",
+          "script": "scripts/advanced_control/restore_registry_from_backup.ps1",
+          "icon": "restore",
+          "description": "استعادة السجل من ملف احتياطي",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إنشاء لقطة للنظام",
+          "script": "scripts/advanced_control/generate_full_system_snapshot.ps1",
+          "icon": "snapshot",
+          "description": "إنشاء نقطة استعادة شاملة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "تنظيف طوارئ للنظام",
+          "script": "scripts/advanced_control/emergency_system_clean_up.ps1",
+          "icon": "emergency",
+          "description": "تنفيذ تنظيف سريع في حالات الطوارئ",
+          "requiresAdmin": false,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح حرجة للنظام",
+          "script": "scripts/advanced_control/critical_repair_routine_execute.ps1",
+          "icon": "critical",
+          "description": "تنفيذ جميع الإصلاحات الحرجة",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        },
+        {
+          "name": "إصلاح تلقائي Knoux",
+          "script": "scripts/advanced_control/knouxwin_autofix_script.ps1",
+          "icon": "auto-fix",
+          "description": "إصلاح النظام تلقائياً بأمان",
+          "requiresAdmin": true,
+          "confirmBeforeRun": true
+        }
+      ]
+    },
+    {
+      "id": "ready_apps",
+      "name": "تطبيقات جاهزة",
+      "color": "#7C4DFF",
+      "scripts": [
+        {
+          "name": "تشغيل Explorer++",
+          "script": "scripts/ready_apps/launch_explorerplusplus.bat",
+          "icon": "explorer",
+          "description": "مدير ملفات متطور",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل Total Commander",
+          "script": "scripts/ready_apps/launch_totalcommander.bat",
+          "icon": "commander",
+          "description": "مدير ملفات متقدم",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل CCleaner",
+          "script": "scripts/ready_apps/launch_ccleaner.bat",
+          "icon": "ccleaner",
+          "description": "أداة تنظيف وتحسين النظام",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل VLC Media Player",
+          "script": "scripts/ready_apps/launch_vlc.bat",
+          "icon": "vlc",
+          "description": "مشغل الوسائط متعدد الاستخدامات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل Mozilla Firefox",
+          "script": "scripts/ready_apps/launch_firefox.bat",
+          "icon": "firefox",
+          "description": "متصفح الإنترنت Firefox",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل Google Chrome",
+          "script": "scripts/ready_apps/launch_chrome.bat",
+          "icon": "chrome",
+          "description": "متصفح الإنترنت Chrome",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل Adobe Reader",
+          "script": "scripts/ready_apps/launch_adobe_reader.bat",
+          "icon": "adobe",
+          "description": "قارئ ملفات PDF",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل 7-Zip",
+          "script": "scripts/ready_apps/launch_7zip.bat",
+          "icon": "7zip",
+          "description": "أداة ضغط وفك ضغط الملفات",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل Notepad++",
+          "script": "scripts/ready_apps/launch_notepad_plusplus.bat",
+          "icon": "notepad",
+          "description": "محرر نصوص متقدم",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل Oracle VM VirtualBox",
+          "script": "scripts/ready_apps/launch_virtualbox.bat",
+          "icon": "virtualbox",
+          "description": "أداة تشغيل الأنظمة الافتراضية",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        },
+        {
+          "name": "تشغيل Visual Studio Code",
+          "script": "scripts/ready_apps/launch_vscode.bat",
+          "icon": "vscode",
+          "description": "محرر الكود المتقدم",
+          "requiresAdmin": false,
+          "confirmBeforeRun": false
+        }
+      ]
+    }
+  ]
+}
