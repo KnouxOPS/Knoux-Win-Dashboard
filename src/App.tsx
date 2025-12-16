@@ -1,301 +1,192 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { CONFIG } from './constants';
-import { Sidebar } from './components/Sidebar';
-import { Header } from './components/Header';
-import { ScriptGrid } from './components/ScriptGrid';
-import { LogPanel } from './components/LogPanel';
-import { ConfirmationModal } from './components/ConfirmationModal';
-import { ToastContainer, ToastMessage } from './components/Toast';
-import { StatusBar } from './components/StatusBar';
-import { SettingsModal } from './components/SettingsModal';
-import { NightModeProvider, useTheme } from './components/NightModeProvider';
-import { Script, ScriptStatus } from './types';
-import { simulateScriptExecution } from './services/mockScriptService';
-import { Info, CheckCircle2, LayoutGrid, HardDrive, ShieldAlert } from 'lucide-react';
-import './styles/cyberpunk.css';
+import React, { useState, useEffect } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 
-const AppContent: React.FC = () => {
-  // Use Settings from Context
-  const { settings, updateSettings } = useTheme();
-  
-  // Navigation & Config
-  const [activeSectionId, setActiveSectionId] = useState<string>(CONFIG.sections[0].id);
-  const [filterText, setFilterText] = useState<string>('');
-  
-  // UI State
-  const [showSettings, setShowSettings] = useState(false);
+// Imports
+import Sidebar from './components/Sidebar';
+import HeroSection from './components/HeroSection';
+import ScriptsGrid from './components/ScriptGrid';
+import TerminalPanel from './components/LogPanel';
+import { CONFIG } from './constants'; // Fallback config
 
-  // Execution State
-  const [scriptStatuses, setScriptStatuses] = useState<Record<string, ScriptStatus>>({});
-  const [queue, setQueue] = useState<Script[]>([]);
-  const [activeExecutions, setActiveExecutions] = useState<Script[]>([]);
-  const [logs, setLogs] = useState<string>('System initialized...\nWaiting for commands...\n');
-  const [lastAction, setLastAction] = useState<string>('Ready');
-  
-  // UX State
-  const [adminModalScript, setAdminModalScript] = useState<Script | null>(null);
-  const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  
-  const logEndRef = useRef<HTMLDivElement>(null);
-  const activeSection = CONFIG.sections.find(s => s.id === activeSectionId) || CONFIG.sections[0];
+// 1. Cyberpunk Global Styles
+const GlobalStyle = createGlobalStyle`
+  :root {
+    /* Base Colors */
+    --knx-bg: #0b0f14;
+    --knx-surface: #0f1720;
+    --knx-border: #1e293b;
+    
+    /* Neon Accents */
+    --knx-purple: #7c3aed;
+    --knx-purple-dim: rgba(124, 58, 237, 0.14);
+    --knx-cyan: #00d1ff;
+    --knx-cyan-dim: rgba(0, 209, 255, 0.14);
+    
+    /* States */
+    --knx-success: #22c55e;
+    --knx-error: #ff3860;
+    --knx-muted: #9aa4b2;
+    --knx-text-main: #f8fafc;
+    
+    /* Performance Glows */
+    --knx-glow-idle: drop-shadow(0 0 8px var(--knx-purple-dim));
+    --knx-glow-running: drop-shadow(0 0 15px rgba(0, 209, 255, 0.4));
+    --knx-glow-success: drop-shadow(0 0 10px rgba(34, 197, 94, 0.4));
+    --knx-glow-error: drop-shadow(0 0 10px rgba(255, 56, 96, 0.4));
+  }
 
-  // --- Electron Integration ---
+  @keyframes knx-pulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 209, 255, 0.2)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(0, 209, 255, 0.6)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 209, 255, 0.2)); }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: var(--knx-bg);
+    color: var(--knx-text-main);
+    overflow: hidden;
+  }
+  
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--knx-bg); }
+  ::-webkit-scrollbar-thumb { 
+    background: #334155; 
+    border-radius: 3px;
+    border: 1px solid var(--knx-bg);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--knx-purple); }
+`;
+
+const AppContainer = styled.div`
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--knx-bg);
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(124, 58, 237, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(0, 209, 255, 0.05) 0%, transparent 40%);
+`;
+
+const MainContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+`;
+
+const ContentScrollArea = styled.div`
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  padding-bottom: 240px; /* Space for the bottom log panel */
+`;
+
+interface LogMessage {
+  time: string;
+  text: string;
+  type?: 'info' | 'error' | 'success';
+}
+
+export default function App() {
+  const [config, setConfig] = useState<any>(CONFIG); 
+  const [activeSectionId, setActiveSectionId] = useState('deep_cleaning'); 
+  const [systemInfo, setSystemInfo] = useState<any>(null);
+  const [logs, setLogs] = useState<LogMessage[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
+  const [runningScriptPath, setRunningScriptPath] = useState<string | null>(null);
+
   useEffect(() => {
-    let cleanup: (() => void) | undefined;
+    const initializeApp = async () => {
+        if (window.electronAPI) {
+            try {
+                const loadedConfig = await window.electronAPI.loadConfig();
+                setConfig(loadedConfig);
+                const info = await window.electronAPI.getSystemInfo();
+                setSystemInfo(info);
+            } catch (e) { console.error(e); }
+        } else {
+            // Mock System Info for browser preview
+            setSystemInfo({ freeMem: '32 GB', totalMem: '64 GB', platform: 'Web Simulation' });
+        }
+    };
+    initializeApp();
 
+    let cleanup = () => {};
     if (window.electronAPI) {
-      cleanup = window.electronAPI.onScriptOutput((data: string) => {
-        setLogs(prev => prev + data);
-      });
+        cleanup = window.electronAPI.onScriptOutput((msg: string) => {
+            setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), text: msg, type: 'info' }]);
+            
+            // Basic detection of script end
+            if (msg.includes('Process Completed') || msg.includes('Exit Code')) {
+                setIsRunning(false);
+                setRunningScriptPath(null);
+            }
+        });
     }
 
-    return () => {
-      if (cleanup) cleanup();
-    };
+    return () => cleanup();
   }, []);
 
-  // --- Filtering ---
-  const getDisplayScripts = (): Script[] => {
-    const term = filterText.trim().toLowerCase();
-    if (!term) return activeSection.scripts;
-    const allScripts = CONFIG.sections.flatMap(s => s.scripts);
-    return allScripts.filter(s => 
-      s.name.toLowerCase().includes(term) || 
-      s.script.toLowerCase().includes(term)
-    );
-  };
-
-  const displayScripts = getDisplayScripts();
-
-  // --- Toast Helpers ---
-  const addToast = (type: 'success' | 'error' | 'info', title: string, message: string) => {
-    const id = Date.now().toString();
-    setToasts(prev => [...prev, { id, type, title, message }]);
-  };
-  const removeToast = (id: string) => setToasts(prev => prev.filter(t => t.id !== id));
-
-  // --- Execution Logic ---
-  const appendLog = (msg: string) => setLogs(prev => prev + msg);
-
-  // Queue Processing Effect
-  useEffect(() => {
-    const limit = settings.parallelExecution ? settings.maxConcurrent : 1;
-    if (queue.length === 0 || activeExecutions.length >= limit) return;
-
-    // Take next script
-    const nextScript = queue[0];
-    const newQueue = queue.slice(1);
-    const newActive = [...activeExecutions, nextScript];
-
-    setQueue(newQueue);
-    setActiveExecutions(newActive);
+  const handleRunScript = async (scriptPath: string, scriptName: string) => {
+    if (isRunning) return;
     
-    // Start Execution
-    runSingleScript(nextScript).then(() => {
-        setActiveExecutions(prev => prev.filter(s => s.script !== nextScript.script));
-    });
-
-  }, [queue, activeExecutions, settings.parallelExecution, settings.maxConcurrent]);
-
-  const runSingleScript = async (script: Script) => {
-    setScriptStatuses(prev => ({ ...prev, [script.script]: 'running' }));
-    setLastAction(`Running: ${script.name}`);
-    
-    const timestamp = new Date().toLocaleTimeString();
-    appendLog(`\n--- [${timestamp}] START: ${script.name} ---\n`);
+    setIsRunning(true);
+    setRunningScriptPath(scriptPath);
+    setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), text: `>> Executing: ${scriptName}...`, type: 'success' }]);
 
     try {
       if (window.electronAPI) {
-        const result = await window.electronAPI.runScript(script.script);
-        
-        if (result === 'success') {
-          setScriptStatuses(prev => ({ ...prev, [script.script]: 'success' }));
-          addToast('success', 'Execution Finished', `${script.name} completed successfully.`);
-          setLastAction(`Completed: ${script.name}`);
-        } else {
-          setScriptStatuses(prev => ({ ...prev, [script.script]: 'error' }));
-          addToast('error', 'Execution Warning', `${script.name} finished with warnings.`);
-          setLastAction(`Warning: ${script.name}`);
+        const result = await window.electronAPI.runScript(scriptPath);
+        if (result !== 'success') {
+             // Handle synchronous errors (if API returns immediately)
+             // Usually logs handle the output stream
         }
       } else {
-        const stream = simulateScriptExecution(script, 300);
-        for await (const chunk of stream) {
-          appendLog(chunk);
-        }
-        setScriptStatuses(prev => ({ ...prev, [script.script]: 'success' }));
-        addToast('success', 'Mock Finished', `${script.name} completed.`);
-        setLastAction(`Completed: ${script.name}`);
+        // Mock execution for browser
+        setTimeout(() => {
+           setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), text: `[MOCK] ${scriptName} finished successfully.`, type: 'success' }]);
+           setIsRunning(false);
+           setRunningScriptPath(null);
+        }, 2000);
       }
-    } catch (e) {
-      setScriptStatuses(prev => ({ ...prev, [script.script]: 'error' }));
-      appendLog(`!! [ERR] ${script.name} failed: ${e}\n`);
-      addToast('error', 'Execution Failed', `${script.name} encountered an error.`);
-      setLastAction(`Failed: ${script.name}`);
+    } catch (error: any) {
+      setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), text: `[ERROR] ${error.message || error}`, type: 'error' }]);
+      setIsRunning(false);
+      setRunningScriptPath(null);
     }
   };
-
-  // --- User Actions ---
-  const requestRunScript = (script: Script) => {
-    if (scriptStatuses[script.script] === 'running' || scriptStatuses[script.script] === 'queued') return;
-    
-    if (script.admin && settings.confirmSensitive) {
-      setAdminModalScript(script);
-    } else {
-      addToQueue(script);
-    }
-  };
-
-  const confirmAdminRun = () => {
-    if (adminModalScript) {
-        addToQueue(adminModalScript);
-        setAdminModalScript(null);
-    }
-  };
-
-  const addToQueue = (script: Script) => {
-    setScriptStatuses(prev => ({ ...prev, [script.script]: 'queued' }));
-    setQueue(prev => [...prev, script]);
-    setLastAction(`Queued: ${script.name}`);
-  };
-
-  const handleRunAll = () => {
-    const scriptsToRun = displayScripts.filter(s => 
-        scriptStatuses[s.script] !== 'running' && scriptStatuses[s.script] !== 'queued'
-    );
-    
-    if (scriptsToRun.length === 0) {
-        addToast('info', 'Nothing to Run', 'All visible scripts are already running or queued.');
-        return;
-    }
-
-    addToast('info', 'Batch Started', `Queued ${scriptsToRun.length} scripts.`);
-    scriptsToRun.forEach(s => {
-        setScriptStatuses(prev => ({ ...prev, [s.script]: 'queued' }));
-    });
-    setQueue(prev => [...prev, ...scriptsToRun]);
-  };
-
-  const handleClearLogs = () => setLogs('');
-
-  useEffect(() => {
-    if (logEndRef.current) logEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [logs]);
-
-  // --- Statistics ---
-  const StatCard = ({ icon: Icon, value, label, color }: any) => (
-    <div className="bg-knx-surface rounded-xl p-4 flex flex-col items-center justify-center border border-white/5 shadow-soft min-h-[100px] relative group overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-      <div className={`mb-3 ${color} drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]`}>
-        <Icon size={32} />
-      </div>
-      <div className="flex gap-2 items-baseline relative z-10">
-        <span className="text-2xl font-bold text-white">{value}</span>
-        <span className="text-xs text-knx-muted leading-tight max-w-[80px] text-center font-mono">{label}</span>
-      </div>
-    </div>
-  );
+  
+  const handleClearLogs = () => setLogs([]);
+  const activeSectionData = config?.sections?.find((s: any) => s.id === activeSectionId) || config?.sections?.[0];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-knx-bg text-text-main font-sans flex-col">
-       <div className="flex flex-1 overflow-hidden">
+    <>
+      <GlobalStyle />
+      <AppContainer>
         <Sidebar 
-            sections={CONFIG.sections} 
-            activeSectionId={activeSectionId} 
-            onSelectSection={setActiveSectionId} 
-            onOpenSettings={() => setShowSettings(true)}
+          sections={config?.sections || []} 
+          activeId={activeSectionId} 
+          onSelect={setActiveSectionId} 
         />
-        
-        <div className="flex-1 flex flex-col min-w-0 relative">
-            <Header 
-            isBatchRunning={activeExecutions.length > 0 || queue.length > 0} 
-            onRunAll={handleRunAll}
-            filterText={filterText}
-            setFilterText={setFilterText}
-            totalScripts={CONFIG.sections.reduce((acc, s) => acc + s.scripts.length, 0)}
-            completedCount={0} 
-            queueLength={queue.length}
-            onOpenSettings={() => setShowSettings(true)}
-            />
-            
-            <main className="flex flex-1 gap-6 p-6 overflow-hidden relative z-0 bg-knx-bg">
-            <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pr-2">
-                
-                {/* Status Banner */}
-                <div 
-                  className="mb-6 flex items-center bg-gradient-to-r from-knx-surface to-transparent p-6 rounded-xl border-l-4 shadow-lg border-opacity-50"
-                  style={{ borderColor: activeSection.color }}
-                >
-                <div className="w-16 h-12 flex items-center justify-center border-2 rounded-lg mr-6 backdrop-blur-md bg-white/5" style={{ borderColor: activeSection.color, color: activeSection.color }}>
-                    <Info size={24} />
-                </div>
-                <div>
-                    <h2 className="text-xl font-light text-white tracking-wide">Knoux Engine: <span className="font-bold drop-shadow-[0_0_5px_currentColor]" style={{ color: activeSection.color }}>ONLINE</span></h2>
-                    <p className="text-knx-muted text-sm mt-1 font-mono">
-                    {queue.length > 0 ? `${queue.length} tasks in queue, ${activeExecutions.length} executing...` : "System ready awaiting directives."}
-                    </p>
-                </div>
-                </div>
-
-                {/* Stats Row */}
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-                  <StatCard icon={LayoutGrid} value={displayScripts.length} label="MODULES" color="text-knx-cyan" />
-                  <StatCard icon={CheckCircle2} value={activeExecutions.length} label="THREADS" color="text-knx-purple" />
-                  <StatCard icon={ShieldAlert} value={CONFIG.sections.flatMap(s=>s.scripts).filter(s=>s.admin).length} label="PRIVILEGED" color="text-knx-error" />
-                  <StatCard icon={HardDrive} value="C:" label="SYSTEM" color="text-gray-400" />
-                  <StatCard icon={Info} value="-" label="STATUS" color="text-knx-success" />
-                </div>
-
-                <ScriptGrid 
-                scripts={displayScripts} 
-                onRun={requestRunScript} 
-                statuses={scriptStatuses}
-                settings={settings}
-                />
-            </div>
-
-            <LogPanel 
-                logs={logs} 
-                logEndRef={logEndRef} 
-                onClear={handleClearLogs}
-            />
-            </main>
-
-            {/* Overlays */}
-            <ConfirmationModal 
-                isOpen={!!adminModalScript} 
-                script={adminModalScript} 
-                onConfirm={confirmAdminRun} 
-                onCancel={() => setAdminModalScript(null)} 
-            />
-            
-            <SettingsModal 
-              isOpen={showSettings}
-              onClose={() => setShowSettings(false)}
-              settings={settings}
-              onSettingsChange={updateSettings}
-            />
-            
-            <ToastContainer toasts={toasts} removeToast={removeToast} />
-        </div>
-      </div>
-      
-      {/* Bottom Status Bar */}
-      <StatusBar 
-        totalScripts={CONFIG.sections.reduce((a,b)=>a+b.scripts.length,0)}
-        runningCount={activeExecutions.length}
-        queuedCount={queue.length}
-        lastAction={lastAction}
-      />
-    </div>
+        <MainContent>
+          <ContentScrollArea>
+            <HeroSection systemInfo={systemInfo} />
+            {activeSectionData && (
+              <ScriptsGrid 
+                section={activeSectionData} 
+                onRun={handleRunScript}
+                isRunning={isRunning}
+                currentRunningScript={runningScriptPath} 
+              />
+            )}
+          </ContentScrollArea>
+          <TerminalPanel logs={logs} isRunning={isRunning} onClear={handleClearLogs} />
+        </MainContent>
+      </AppContainer>
+    </>
   );
-};
-
-const App: React.FC = () => {
-  return (
-    <NightModeProvider>
-      <AppContent />
-    </NightModeProvider>
-  );
-};
-
-export default App;
+}

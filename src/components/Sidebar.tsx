@@ -1,89 +1,151 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Section } from '../types';
-import { Layers, Shield, Activity, Zap, Box, Settings } from 'lucide-react';
+import { Layers, Shield, Activity, Zap, Box, Settings, Terminal } from 'lucide-react';
 
 interface SidebarProps {
   sections: Section[];
-  activeSectionId: string;
-  onSelectSection: (id: string) => void;
-  onOpenSettings: () => void;
+  activeId: string;
+  onSelect: (id: string) => void;
 }
 
-const getSectionIcon = (id: string) => {
+const SidebarContainer = styled.div`
+  width: 260px;
+  height: 100%;
+  background: rgba(15, 23, 32, 0.8);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  flex-shrink: 0;
+  z-index: 10;
+`;
+
+const Brand = styled.div`
+  padding: 0 24px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 24px;
+`;
+
+const LogoText = styled.h1`
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  span {
+    color: var(--knx-purple);
+    text-shadow: 0 0 15px var(--knx-purple);
+  }
+`;
+
+const NavList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+  overflow-y: auto;
+  flex: 1;
+
+  &::-webkit-scrollbar { width: 4px; }
+`;
+
+const NavItem = styled.button<{ active: boolean; color: string }>`
+  background: ${props => props.active ? 'rgba(124, 58, 237, 0.1)' : 'transparent'};
+  border: 1px solid ${props => props.active ? props.color : 'transparent'};
+  color: ${props => props.active ? '#fff' : '#94a3b8'};
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: #fff;
+    padding-left: 20px;
+  }
+
+  ${props => props.active && `
+    box-shadow: 0 0 15px ${props.color}20;
+    padding-left: 20px;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: ${props.color};
+      box-shadow: 0 0 10px ${props.color};
+    }
+  `}
+`;
+
+const SectionName = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+const Footer = styled.div`
+  padding: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  color: var(--knx-muted);
+  text-align: center;
+`;
+
+const getIcon = (id: string) => {
   switch (id) {
-    case 'deep_cleaning': return <Layers size={20} />;
-    case 'repair_restore': return <Activity size={20} />;
-    case 'system_check': return <Shield size={20} />;
-    case 'optimization': return <Zap size={20} />;
-    case 'advanced_control': return <Settings size={20} />;
-    default: return <Box size={20} />;
+    case 'deep_cleaning': return <Layers size={18} />;
+    case 'repair_restore': return <Activity size={18} />;
+    case 'system_check': return <Shield size={18} />;
+    case 'optimization': return <Zap size={18} />;
+    case 'advanced_control': return <Settings size={18} />;
+    default: return <Box size={18} />;
   }
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ sections, activeSectionId, onSelectSection, onOpenSettings }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ sections, activeId, onSelect }) => {
   return (
-    <div className="w-64 bg-knx-surface flex flex-col h-full shrink-0 border-r border-white/5 z-20 shadow-2xl">
-      {/* Branding Area */}
-      <div className="h-20 flex flex-col justify-center px-6 border-b border-white/5 bg-knx-bg/30 backdrop-blur-sm">
-        <div className="text-knx-cyan text-[10px] uppercase tracking-[0.3em] font-bold mb-1 opacity-90 drop-shadow-[0_0_5px_rgba(0,209,255,0.5)]">Knoux Sec</div>
-        <div className="text-2xl font-light tracking-tight text-white flex items-center gap-1">
-          Win<span className="font-bold text-knx-purple drop-shadow-[0_0_8px_rgba(124,58,237,0.6)]">Hub</span>
-        </div>
-      </div>
+    <SidebarContainer>
+      <Brand>
+        <LogoText>
+          <Terminal size={28} color="var(--knx-cyan)" />
+          KNOUX<span>WIN</span>
+        </LogoText>
+      </Brand>
 
-      <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-2">
-        {sections.map((section) => {
-          const isActive = section.id === activeSectionId;
-          return (
-            <button
-              key={section.id}
-              onClick={() => onSelectSection(section.id)}
-              className={`relative group flex items-center gap-4 px-6 py-4 w-full transition-all duration-300 text-sm font-semibold
-                ${isActive 
-                  ? 'text-white' 
-                  : 'text-knx-muted hover:text-gray-200 hover:bg-white/[0.03]'
-                }`}
-            >
-              {/* Active Indicator & Glow */}
-              {isActive && (
-                <>
-                  <div 
-                    className="absolute right-0 top-0 bottom-0 w-1 shadow-[0_0_15px_currentColor]" 
-                    style={{ backgroundColor: section.color, color: section.color }} 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-l from-white/[0.02] to-transparent pointer-events-none" />
-                </>
-              )}
-              
-              <span 
-                className={`transition-all duration-300 ${isActive ? 'scale-110 drop-shadow-[0_0_8px_currentColor]' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'}`}
-                style={{ color: isActive ? section.color : section.color }}
-              >
-                {getSectionIcon(section.id)}
-              </span>
-              
-              <span className="tracking-wide">{section.name}</span>
-            </button>
-          );
-        })}
+      <NavList>
+        {sections.map(section => (
+          <NavItem
+            key={section.id}
+            active={activeId === section.id}
+            color={section.color}
+            onClick={() => onSelect(section.id)}
+          >
+            {getIcon(section.id)}
+            <SectionName>{section.name}</SectionName>
+          </NavItem>
+        ))}
+      </NavList>
 
-        {/* Spacer */}
-        <div className="mt-8 px-6 text-[10px] text-gray-600 font-bold uppercase tracking-widest mb-2 opacity-60">
-          System Tools
-        </div>
-        <button 
-          onClick={onOpenSettings}
-          className="flex items-center gap-4 px-6 py-3 text-sm text-knx-muted hover:text-white hover:bg-white/[0.03] transition-colors group"
-        >
-          <Settings size={18} className="opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all duration-500" />
-          <span>Configuration</span>
-        </button>
-      </div>
-      
-      {/* Bottom info area */}
-      <div className="p-6 text-xs text-gray-600 border-t border-white/5 font-mono">
-        v2.0.0 <span className="text-knx-success">● Protected</span>
-      </div>
-    </div>
+      <Footer>
+        SYSTEM STATUS: STABLE<br/>v2.5.0 CYBERPUNK
+      </Footer>
+    </SidebarContainer>
   );
 };
+
+export default Sidebar;
