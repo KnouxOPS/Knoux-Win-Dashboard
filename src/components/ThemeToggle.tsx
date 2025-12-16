@@ -12,29 +12,26 @@ interface ThemeToggleProps {
 const ThemeSwitcher = styled.div`
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 8px 16px;
+  gap: 8px;
+  padding: 4px;
   background: ${cyberpunkTheme.gradients.card};
   border: 1px solid ${cyberpunkTheme.colors.primary};
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 245, 255, 0.2);
 `;
 
 const ThemeButton = styled.button<{ active: boolean }>`
   background: ${props => props.active ? cyberpunkTheme.gradients.button : 'transparent'};
   color: ${props => props.active ? '#000' : cyberpunkTheme.colors.primary};
-  border: 1px solid ${cyberpunkTheme.colors.primary};
-  padding: 6px 12px;
-  border-radius: 12px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 16px;
   cursor: pointer;
   font-weight: 700;
   transition: all 0.3s ease;
-  font-size: 11px;
+  font-size: 10px;
   
   &:hover {
-    background: ${cyberpunkTheme.gradients.hover};
-    color: #000;
-    transform: translateY(-2px);
+    background: ${props => props.active ? cyberpunkTheme.gradients.button : 'rgba(0, 245, 255, 0.1)'};
   }
 `;
 

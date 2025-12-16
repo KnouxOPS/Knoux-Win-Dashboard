@@ -1,86 +1,108 @@
-.cyber-glow {
-  animation: cyberPulse 3s infinite;
+:root {
+  --knx-bg: #0b0f14;
+  --knx-surface: #0f1720;
+  --knx-purple: #7c3aed;
+  --knx-cyan: #00d1ff;
+  --knx-success: #22c55e;
+  --knx-error: #ff3860;
+  --knx-muted: #9aa4b2;
 }
 
-@keyframes cyberPulse {
-  0%, 100% { 
-    box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+/* Base App Styles override */
+body {
+  background-color: var(--knx-bg) !important;
+  color: #e2e8f0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--knx-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--knx-purple);
+}
+
+/* --- Glow Utilities --- */
+
+/* Base Glow */
+.knx-glow {
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.3));
+  transition: filter 0.3s ease, transform 0.2s ease;
+}
+
+/* Idle State */
+.knx-glow-idle {
+  filter: drop-shadow(0 0 5px rgba(124, 58, 237, 0.2));
+}
+
+/* Success State */
+.knx-glow-success {
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));
+}
+
+/* Error State */
+.knx-glow-error {
+  filter: drop-shadow(0 0 8px rgba(255, 56, 96, 0.6));
+}
+
+/* --- Animations --- */
+
+/* Running Pulse (Cyan) */
+@keyframes knx-pulse-cyan {
+  0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 209, 255, 0.3)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 15px rgba(0, 209, 255, 0.7)); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 209, 255, 0.3)); }
+}
+
+.knx-running {
+  animation: knx-pulse-cyan 1.5s infinite ease-in-out;
+}
+
+/* Error Flicker */
+@keyframes knx-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(255, 56, 96, 0.6));
   }
-  50% { 
-    box-shadow: 0 0 30px rgba(0, 245, 255, 0.8);
+  20%, 24%, 55% {
+    opacity: 0.5;
+    filter: none;
   }
 }
 
-.glitch-text {
-  position: relative;
-  display: inline-block;
+.knx-error-anim {
+  animation: knx-flicker 0.3s ease-out;
 }
 
-.glitch-text::before,
-.glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* Glassmorphism Card Background */
+.knx-glass-card {
+  background: rgba(15, 23, 32, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.glitch-text::before {
-  left: 2px;
-  text-shadow: -2px 0 #ff00ff;
-  clip: rect(44px, 450px, 56px, 0);
-  animation: glitch-anim 5s infinite linear alternate-reverse;
+.knx-glass-card:hover {
+  background: rgba(15, 23, 32, 0.8);
+  border-color: rgba(124, 58, 237, 0.3);
 }
 
-.glitch-text::after {
-  left: -2px;
-  text-shadow: -2px 0 #00f5ff;
-  clip: rect(44px, 450px, 56px, 0);
-  animation: glitch-anim2 5s infinite linear alternate-reverse;
+/* Border Gradient Animation for Active State */
+@keyframes border-flow {
+  0% { border-color: var(--knx-purple); }
+  50% { border-color: var(--knx-cyan); }
+  100% { border-color: var(--knx-purple); }
 }
 
-@keyframes glitch-anim {
-  0% { clip: rect(42px, 9999px, 44px, 0); }
-  5% { clip: rect(12px, 9999px, 59px, 0); }
-  10% { clip: rect(48px, 9999px, 29px, 0); }
-  15% { clip: rect(42px, 9999px, 73px, 0); }
-  20% { clip: rect(63px, 9999px, 27px, 0); }
-  25% { clip: rect(34px, 9999px, 55px, 0); }
-  30% { clip: rect(86px, 9999px, 73px, 0); }
-  35% { clip: rect(20px, 9999px, 20px, 0); }
-  40% { clip: rect(26px, 9999px, 60px, 0); }
-  45% { clip: rect(25px, 9999px, 66px, 0); }
-  50% { clip: rect(57px, 9999px, 98px, 0); }
-  55% { clip: rect(5px, 9999px, 46px, 0); }
-  60% { clip: rect(82px, 9999px, 31px, 0); }
-  65% { clip: rect(54px, 9999px, 27px, 0); }
-  70% { clip: rect(28px, 9999px, 99px, 0); }
-  75% { clip: rect(45px, 9999px, 69px, 0); }
-  80% { clip: rect(23px, 9999px, 85px, 0); }
-  85% { clip: rect(1px, 9999px, 83px, 0); }
-  90% { clip: rect(72px, 9999px, 11px, 0); }
-  95% { clip: rect(60px, 9999px, 89px, 0); }
-  100% { clip: rect(52px, 9999px, 74px, 0); }
-}
-
-@keyframes glitch-anim2 {
-  0% { clip: rect(65px, 9999px, 100px, 0); }
-  5% { clip: rect(52px, 9999px, 74px, 0); }
-  10% { clip: rect(79px, 9999px, 85px, 0); }
-  15% { clip: rect(75px, 9999px, 5px, 0); }
-  20% { clip: rect(67px, 9999px, 61px, 0); }
-  25% { clip: rect(14px, 9999px, 79px, 0); }
-  30% { clip: rect(1px, 9999px, 66px, 0); }
-  35% { clip: rect(86px, 9999px, 30px, 0); }
-  40% { clip: rect(23px, 9999px, 98px, 0); }
-  45% { clip: rect(85px, 9999px, 72px, 0); }
-  50% { clip: rect(71px, 9999px, 75px, 0); }
-  55% { clip: rect(2px, 9999px, 48px, 0); }
-  60% { clip: rect(30px, 9999px, 16px, 0); }
-  65% { clip: rect(59px, 9999px, 50px, 0); }
-  70% { clip: rect(41px, 9999px, 62px, 0); }
-  75% { clip: rect(2px, 9999px, 82px, 0); }
-  80% { clip: rect(47px, 9999px, 73px, 0); }
-  85% { clip: rect(3px, 9999px, 83px, 0); }
+.knx-border-flow {
+  animation: border-flow 3s infinite alternate;
 }

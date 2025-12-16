@@ -41,10 +41,10 @@ export interface AppSettings {
 }
 
 export interface ElectronAPI {
-  runScript: (scriptPath: string) => Promise<string>; // returns 'success', 'warning' or 'error'
+  runScript: (scriptPath: string) => Promise<string>;
   loadConfig: () => Promise<Config>;
   getSystemInfo: () => Promise<any>;
-  onScriptOutput: (callback: (data: string) => void) => () => void; // Returns cleanup function
+  onScriptOutput: (callback: (data: string) => void) => () => void;
 }
 
 declare global {

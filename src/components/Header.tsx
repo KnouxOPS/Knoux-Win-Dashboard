@@ -1,8 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { useTheme } from './NightModeProvider';
-import { ThemeToggle } from './ThemeToggle';
-import { Search, Play, Monitor, Minus, Maximize2, X, Loader2, Settings, HelpCircle } from 'lucide-react';
+import { Search, Play, Monitor, Minus, Maximize2, X, Loader2, Settings } from 'lucide-react';
 
 interface HeaderProps {
   isBatchRunning: boolean;
@@ -15,189 +12,81 @@ interface HeaderProps {
   onOpenSettings: () => void;
 }
 
-interface TopBarContainerProps {
-  cyberGlow: boolean;
-  themeMode: string;
-}
-
-const TopBarContainer = styled.div<TopBarContainerProps>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  height: 64px;
-  background: ${props => props.themeMode === 'light' 
-    ? '#ffffff' 
-    : 'linear-gradient(145deg, rgba(26,26,46,0.9), rgba(22,33,62,0.9))'};
-  border-bottom: 2px solid #00f5ff;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-  shrink: 0;
-  
-  ${props => props.cyberGlow && css`
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #00f5ff, #ff00ff, #ffff00, #00f5ff);
-      background-size: 200% auto;
-      animation: cyber-border 3s linear infinite;
-    }
-    
-    @keyframes cyber-border {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
-    }
-  `}
-`;
-
-const LogoSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-`;
-
-const Logo = styled.div<{ cyberGlow: boolean }>`
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #00f5ff, #008cff);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 18px;
-  color: #000;
-  border: 2px solid #00f5ff;
-  box-shadow: 0 0 15px rgba(0, 245, 255, 0.5);
-  animation: ${props => props.cyberGlow ? 'logo-pulse 2s infinite' : 'none'};
-  
-  @keyframes logo-pulse {
-    0%, 100% { box-shadow: 0 0 10px rgba(0, 245, 255, 0.3); }
-    50% { box-shadow: 0 0 25px rgba(0, 245, 255, 0.8); }
-  }
-`;
-
-const AppName = styled.h1`
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  color: #00f5ff;
-  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
-  font-family: 'Segoe UI', sans-serif;
-  letter-spacing: 1px;
-`;
-
-const StatusIndicator = styled.div`
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: #00ff88;
-  box-shadow: 0 0 15px #00ff88;
-  animation: status-pulse 1.5s infinite;
-  
-  @keyframes status-pulse {
-    0%, 100% { box-shadow: 0 0 5px #00ff88; }
-    50% { box-shadow: 0 0 20px #00ff88; }
-  }
-`;
-
-const Controls = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-`;
-
-const IconButton = styled.button<{ primary?: boolean }>`
-  background: ${props => props.primary ? 'linear-gradient(145deg, #00f5ff, #008cff)' : 'transparent'};
-  color: ${props => props.primary ? '#000' : '#00f5ff'};
-  border: 2px solid #00f5ff;
-  padding: 8px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 700;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  
-  &:hover {
-    background: ${props => props.primary ? 'linear-gradient(145deg, #00f5ff, #ff00ff)' : '#00f5ff'};
-    color: ${props => props.primary ? '#000' : '#000'};
-    box-shadow: 0 0 15px rgba(0, 245, 255, 0.5);
-    transform: translateY(-2px);
-  }
-  
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-`;
-
-const SearchInput = styled.input`
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid #00f5ff;
-  color: #fff;
-  font-size: 13px;
-  width: 200px;
-  
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
-  }
-`;
-
 export const Header: React.FC<HeaderProps> = ({ 
   isBatchRunning, 
   onRunAll, 
   filterText, 
   setFilterText,
+  totalScripts,
+  completedCount,
+  queueLength,
   onOpenSettings
 }) => {
-  const { theme, changeTheme, settings } = useTheme();
-
+  const progress = isBatchRunning && totalScripts > 0 
+    ? Math.round((completedCount / (completedCount + queueLength + 1)) * 100) 
+    : 0;
+  
   return (
-    <TopBarContainer cyberGlow={settings.cyberGlow} themeMode={theme}>
-      <LogoSection>
-        <Logo cyberGlow={settings.cyberGlow}>K</Logo>
-        <AppName>KNOUX WIN</AppName>
-        <StatusIndicator title="System Online" />
-      </LogoSection>
-      
-      <div className="flex items-center gap-4">
-        <ThemeToggle 
-            currentTheme={theme} 
-            onThemeChange={changeTheme}
-            settings={settings}
-        />
-        
-        <SearchInput 
-            placeholder="Search scripts..." 
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-        />
+    <div className="h-16 flex items-center justify-between px-6 shrink-0 relative overflow-hidden bg-knx-surface/50 border-b border-white/5 backdrop-blur-md">
+      {/* Progress Bar Overlay */}
+      {isBatchRunning && (
+        <div className="absolute bottom-0 left-0 h-[2px] bg-knx-purple/20 w-full">
+           <div 
+             className="h-full bg-gradient-to-r from-knx-purple to-knx-cyan transition-all duration-300 shadow-[0_0_15px_#00d1ff]" 
+             style={{ width: `${Math.max(5, progress)}%` }} 
+           />
+        </div>
+      )}
+
+      <div className="flex items-center gap-4 text-knx-muted text-sm font-mono">
+         {isBatchRunning && (
+            <span className="flex items-center gap-2 text-knx-cyan animate-pulse">
+                <Loader2 size={14} className="animate-spin" />
+                QUEUE: {queueLength} PENDING
+            </span>
+         )}
       </div>
 
-      <Controls>
-        <IconButton onClick={onOpenSettings}>
-             <Settings size={16} />
-        </IconButton>
-        <IconButton>
-            <HelpCircle size={16} />
-        </IconButton>
-        <IconButton primary onClick={onRunAll} disabled={isBatchRunning}>
-            {isBatchRunning ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />} 
-            Run All
-        </IconButton>
-      </Controls>
-    </TopBarContainer>
+      <div className="flex gap-4 items-center">
+        <div className="relative group">
+          <input 
+            placeholder="Search modules..." 
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            className="pl-10 pr-4 py-1.5 w-64 rounded-lg bg-knx-bg border border-white/10 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-knx-purple/50 focus:ring-1 focus:ring-knx-purple/50 transition-all font-mono"
+          />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-knx-purple transition-colors" />
+        </div>
+        
+        <button 
+          onClick={onRunAll}
+          disabled={isBatchRunning}
+          className={`flex items-center gap-2 px-5 py-1.5 rounded-lg text-sm font-bold tracking-wide transition-all shadow-lg border border-transparent ${
+            isBatchRunning 
+              ? 'bg-knx-bg text-gray-600 cursor-not-allowed border-white/5' 
+              : 'bg-gradient-to-r from-knx-purple to-violet-700 text-white hover:shadow-[0_0_15px_rgba(124,58,237,0.4)] hover:border-white/10'
+          }`}
+        >
+          {isBatchRunning ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} fill="currentColor" />}
+          <span>{isBatchRunning ? 'EXECUTING...' : 'RUN ALL'}</span>
+        </button>
+
+        <button
+          onClick={onOpenSettings}
+          className="p-2 rounded-lg text-knx-muted hover:text-white hover:bg-white/5 transition-colors"
+          title="Settings"
+        >
+          <Settings size={20} />
+        </button>
+
+        <div className="flex items-center gap-3 ml-2 text-gray-500 border-l border-white/10 pl-4">
+            <div className="flex gap-3">
+                <Minus size={16} className="hover:text-white cursor-pointer transition-colors" />
+                <Maximize2 size={14} className="hover:text-white cursor-pointer transition-colors" />
+                <X size={16} className="hover:text-knx-error hover:drop-shadow-[0_0_5px_rgba(255,56,96,0.8)] cursor-pointer transition-all" />
+            </div>
+        </div>
+      </div>
+    </div>
   );
 };

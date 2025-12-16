@@ -31,21 +31,22 @@ const GlobalStyles = createGlobalStyle`
   body.cyberpunk-theme {
     background: linear-gradient(135deg, #0a0a1a, #16213e);
     color: #ffffff;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
   }
   
   body.light-theme {
     background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
     color: #333333;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
   }
   
   body.dark-theme {
     background: linear-gradient(135deg, #131519, #1A1D23);
     color: #E0E6ED;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
   }
   
+  /* Shared transitions */
   body {
     transition: background 0.3s ease, color 0.3s ease;
   }
@@ -82,6 +83,7 @@ export const NightModeProvider: React.FC<NightModeProviderProps> = ({ children }
 
   useEffect(() => {
     const savedSettings = localStorage.getItem('knoux-settings');
+    
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
@@ -109,6 +111,7 @@ export const NightModeProvider: React.FC<NightModeProviderProps> = ({ children }
 
   const updateSettings = (newSettings: AppSettings) => {
     setSettings(newSettings);
+    // If theme changed inside settings object, update local state
     if (newSettings.theme !== theme) {
       setTheme(newSettings.theme);
       document.body.className = `${newSettings.theme}-theme`;

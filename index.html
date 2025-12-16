@@ -15,26 +15,36 @@
               mono: ['JetBrains Mono', 'monospace'],
             },
             colors: {
+              knx: {
+                bg: '#0b0f14',
+                surface: '#0f1720',
+                purple: '#7c3aed',
+                cyan: '#00d1ff',
+                success: '#22c55e',
+                error: '#ff3860',
+                muted: '#9aa4b2'
+              },
               bg: {
-                main: '#131519',   // Very dark navy background
-                panel: '#1A1D23',  // Sidebar/Header color
-                card: '#232730',   // Card background
-                lighter: '#2C323E' // Hover states
+                main: '#0b0f14',
+                panel: '#0f1720',
+                card: '#161e29',
+                lighter: '#1e293b'
               },
               text: {
-                main: '#E0E6ED',
-                sub: '#8B9BB4',
-                muted: '#5A6B85'
+                main: '#e2e8f0',
+                sub: '#94a3b8',
+                muted: '#64748b'
               },
               accent: {
-                blue: '#00A8FF',   // The electric blue from the screenshot
-                glow: 'rgba(0, 168, 255, 0.15)',
-                dark: '#0077CC'
+                blue: '#00d1ff',
+                glow: 'rgba(0, 209, 255, 0.15)',
+                dark: '#0090b0'
               }
             },
             boxShadow: {
-              'soft': '0 4px 20px rgba(0,0,0,0.4)',
-              'glow': '0 0 15px rgba(0, 168, 255, 0.2)'
+              'soft': '0 4px 20px rgba(0,0,0,0.6)',
+              'glow': '0 0 20px rgba(124, 58, 237, 0.15)',
+              'neon': '0 0 10px rgba(0, 209, 255, 0.3)'
             }
           }
         }
@@ -42,23 +52,23 @@
     </script>
     <style>
       body {
-        background-color: #131519;
-        color: #E0E6ED;
+        background-color: #0b0f14;
+        color: #e2e8f0;
       }
-      /* Custom scrollbar to match the blue theme */
+      /* Custom scrollbar */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #131519; 
+        background: #0b0f14; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #2C323E; 
+        background: #1e293b; 
         border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #00A8FF; 
+        background: #7c3aed; 
       }
     </style>
   <script type="importmap">

@@ -183,19 +183,20 @@ const AppContent: React.FC = () => {
 
   // --- Statistics ---
   const StatCard = ({ icon: Icon, value, label, color }: any) => (
-    <div className="bg-bg-card rounded-lg p-4 flex flex-col items-center justify-center border border-white/[0.02] shadow-soft min-h-[100px]">
-      <div className={`mb-3 ${color}`}>
+    <div className="bg-knx-surface rounded-xl p-4 flex flex-col items-center justify-center border border-white/5 shadow-soft min-h-[100px] relative group overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className={`mb-3 ${color} drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]`}>
         <Icon size={32} />
       </div>
-      <div className="flex gap-2 items-baseline">
-        <span className="text-2xl font-bold text-accent-blue">{value}</span>
-        <span className="text-xs text-text-sub leading-tight max-w-[80px] text-center">{label}</span>
+      <div className="flex gap-2 items-baseline relative z-10">
+        <span className="text-2xl font-bold text-white">{value}</span>
+        <span className="text-xs text-knx-muted leading-tight max-w-[80px] text-center font-mono">{label}</span>
       </div>
     </div>
   );
 
   return (
-    <div className="flex h-screen overflow-hidden text-text-main font-sans flex-col">
+    <div className="flex h-screen overflow-hidden bg-knx-bg text-text-main font-sans flex-col">
        <div className="flex flex-1 overflow-hidden">
         <Sidebar 
             sections={CONFIG.sections} 
@@ -216,32 +217,32 @@ const AppContent: React.FC = () => {
             onOpenSettings={() => setShowSettings(true)}
             />
             
-            <main className="flex flex-1 gap-6 p-6 overflow-hidden relative z-0">
+            <main className="flex flex-1 gap-6 p-6 overflow-hidden relative z-0 bg-knx-bg">
             <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pr-2">
                 
                 {/* Status Banner */}
                 <div 
-                  className="mb-6 flex items-center bg-gradient-to-r from-bg-card to-transparent p-6 rounded-lg border-l-4 shadow-lg transition-all"
+                  className="mb-6 flex items-center bg-gradient-to-r from-knx-surface to-transparent p-6 rounded-xl border-l-4 shadow-lg border-opacity-50"
                   style={{ borderColor: activeSection.color }}
                 >
-                <div className="w-16 h-12 flex items-center justify-center border-2 rounded-lg mr-6" style={{ borderColor: activeSection.color, color: activeSection.color }}>
+                <div className="w-16 h-12 flex items-center justify-center border-2 rounded-lg mr-6 backdrop-blur-md bg-white/5" style={{ borderColor: activeSection.color, color: activeSection.color }}>
                     <Info size={24} />
                 </div>
                 <div>
-                    <h2 className="text-xl font-light text-white">Knoux Engine: <span className="font-normal" style={{ color: activeSection.color }}>Online</span></h2>
-                    <p className="text-text-sub text-sm mt-1">
-                    {queue.length > 0 ? `${queue.length} scripts in queue, ${activeExecutions.length} running...` : "System ready for commands."}
+                    <h2 className="text-xl font-light text-white tracking-wide">Knoux Engine: <span className="font-bold drop-shadow-[0_0_5px_currentColor]" style={{ color: activeSection.color }}>ONLINE</span></h2>
+                    <p className="text-knx-muted text-sm mt-1 font-mono">
+                    {queue.length > 0 ? `${queue.length} tasks in queue, ${activeExecutions.length} executing...` : "System ready awaiting directives."}
                     </p>
                 </div>
                 </div>
 
                 {/* Stats Row */}
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-                  <StatCard icon={LayoutGrid} value={displayScripts.length} label="visible scripts" color="text-accent-blue" />
-                  <StatCard icon={CheckCircle2} value={activeExecutions.length} label="active threads" color="text-orange-400" />
-                  <StatCard icon={ShieldAlert} value={CONFIG.sections.flatMap(s=>s.scripts).filter(s=>s.admin).length} label="admin tools" color="text-purple-400" />
-                  <StatCard icon={HardDrive} value="C:" label="system drive" color="text-blue-400" />
-                  <StatCard icon={Info} value="-" label="last status" color="text-cyan-400" />
+                  <StatCard icon={LayoutGrid} value={displayScripts.length} label="MODULES" color="text-knx-cyan" />
+                  <StatCard icon={CheckCircle2} value={activeExecutions.length} label="THREADS" color="text-knx-purple" />
+                  <StatCard icon={ShieldAlert} value={CONFIG.sections.flatMap(s=>s.scripts).filter(s=>s.admin).length} label="PRIVILEGED" color="text-knx-error" />
+                  <StatCard icon={HardDrive} value="C:" label="SYSTEM" color="text-gray-400" />
+                  <StatCard icon={Info} value="-" label="STATUS" color="text-knx-success" />
                 </div>
 
                 <ScriptGrid 
